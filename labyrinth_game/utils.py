@@ -10,7 +10,7 @@ def describe_current_room(game_state: dict):
     """
 
     current_room = game_state["current_room"]
-    room_data = ROOMS[current_room]
+    room_data = get_room_data(current_room)
 
     room_name = current_room.replace("_", " ").upper()
     print(f"== {room_name} ==")
@@ -24,3 +24,17 @@ def describe_current_room(game_state: dict):
 
     if room_data["puzzle"]:
         print("Кажется, здесь есть загадка (используйте команду solve).")
+
+
+def get_room_data(room_name: str) -> dict:
+    """
+    Возвращает данные комнаты по её названию или пустой словарь, если комната
+    не найдена.
+
+    Args:
+        room_name (str): Название комнаты.
+    Returns:
+        dict: Данные комнаты.
+    """
+
+    return ROOMS[room_name] if room_name in ROOMS else {}
