@@ -71,3 +71,34 @@ def take_item(game_state: dict, item_name: str):
         print(f"Вы подняли: {item_name}")
     else:
         print("Такого предмета здесь нет.")
+
+
+def use_item(game_state: dict, item_name: str):
+    """
+    Использует предмет, если он есть у игрока. Эффект зависит от предмета.
+
+    Args:
+        game_state (dict): Текущее состояние игры.
+        item_name (str): Название предмета.
+    """
+
+    available_items = game_state["player_inventory"]
+
+    if item_name not in available_items:
+        print("У вас нет такого предмета.")
+        return
+
+    match item_name:
+        case "torch":
+            print("Вы зажигаете факел, и становится светлее.")
+        case "sword":
+            print("Вы сжимаете меч в руке, и это добавляет вам уверенности.")
+        case "bronze box":
+            rusty_key = "rusty key"
+            if rusty_key in available_items:
+                print("Коробка пуста.")
+            else:
+                print("Вы открываете шкатулку и достаёте оттуда ржавый ключ.")
+                available_items.append(rusty_key)
+        case _:
+            print("Вы не знаете, как использовать этот предмет.")
