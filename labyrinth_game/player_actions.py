@@ -10,3 +10,18 @@ def show_inventory(game_state: dict):
         print(f"Инвентарь: {', '.join(inventory)}")
     else:
         print("Инвентарь пуст.")
+
+
+def get_input(prompt="> ") -> str:
+    """
+    Запрашивает у пользователя данные (команду, название, ответ) и возвращает их.
+
+    Args:
+        prompt (object): приглашение пользователя к вводу
+    """
+
+    try:
+        return input(prompt).strip()
+    except (KeyboardInterrupt, EOFError):
+        print("\nВыход из игры.")
+        return "quit"
