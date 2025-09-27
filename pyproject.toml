@@ -6,14 +6,23 @@ authors = ["subterraneanbob <4823336+subterraneanbob@users.noreply.github.com>"]
 readme = "README.md"
 packages = [{ include = "labyrinth_game" }]
 
-
 [tool.poetry.dependencies]
 python = "^3.12"
-
 
 [tool.poetry.scripts]
 project = "labyrinth_game.main:main"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.13.2"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = ["venv", ".venv", "dist", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = []
 
 [build-system]
 requires = ["poetry-core"]
