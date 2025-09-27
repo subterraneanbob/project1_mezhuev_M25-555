@@ -50,3 +50,24 @@ def move_player(game_state: dict, direction: str):
         describe_current_room(game_state)
     else:
         print("Нельзя пойти в этом направлении.")
+
+
+def take_item(game_state: dict, item_name: str):
+    """
+    Добавляет предмет в инвентарь игрока, если он есть в комнате.
+    Выводит сообщение о результате в любом случае, даже если предмета нет.
+
+    Args:
+        game_state (dict): Текущее состояние игры.
+        item_name (str): Название предмета.
+    """
+
+    room_data = get_room_data(game_state["current_room"])
+    room_items = room_data["items"]
+
+    if item_name in room_items:
+        game_state["player_inventory"].append(item_name)
+        room_items.remove(item_name)
+        print(f"Вы подняли: {item_name}")
+    else:
+        print("Такого предмета здесь нет.")
