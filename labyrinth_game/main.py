@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-from .player_actions import get_input
+from sys import exit
+
+from .player_actions import get_input, move_player, show_inventory, take_item
 from .utils import describe_current_room
 
 game_state = {
@@ -11,12 +13,46 @@ game_state = {
 }
 
 
+def process_command(game_state: dict, command: str):
+    """
+    Обрабатывает введённую пользователем команду.
+    Доступные команды: look, use, go, take, inventory, quit | exit
+
+    Args:
+        game_state (dict): Текущее состояние игры.
+        command (str): Команда, полученная от пользователя.
+    """
+
+    parts = [part.strip() for part in command.split(" ", maxsplit=1)]
+
+    if len(parts) == 1:
+        cmd, arg = parts[0], ""
+    else:
+        cmd, arg = parts
+
+    match cmd:
+        case "look":
+            describe_current_room(game_state)
+        case "use":
+            pass
+        case "go":
+            move_player(game_state, arg)
+        case "take":
+            take_item(game_state, arg)
+        case "inventory":
+            show_inventory(game_state)
+        case "quit" | "exit":
+            print("\nВыход из игры.")
+            exit(0)
+
+
 def main():
     print("Добро пожаловать в Лабиринт сокровищ!")
     describe_current_room(game_state)
 
-    while (_ := get_input()) != "quit":
-        pass
+    while True:
+        command = get_input()
+        process_command(game_state, command)
 
 
 if __name__ == "__main__":
