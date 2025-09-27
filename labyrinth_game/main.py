@@ -3,7 +3,7 @@
 from sys import exit
 
 from .player_actions import get_input, move_player, show_inventory, take_item, use_item
-from .utils import describe_current_room
+from .utils import describe_current_room, solve_puzzle
 
 game_state = {
     "player_inventory": [],  # Инвентарь игрока
@@ -16,7 +16,7 @@ game_state = {
 def process_command(game_state: dict, command: str):
     """
     Обрабатывает введённую пользователем команду.
-    Доступные команды: look, use, go, take, inventory, quit | exit
+    Доступные команды: look, use, go, take, inventory, solve, quit | exit
 
     Args:
         game_state (dict): Текущее состояние игры.
@@ -41,6 +41,8 @@ def process_command(game_state: dict, command: str):
             take_item(game_state, arg)
         case "inventory":
             show_inventory(game_state)
+        case "solve":
+            solve_puzzle(game_state)
         case "quit" | "exit":
             print("\nВыход из игры.")
             exit(0)
