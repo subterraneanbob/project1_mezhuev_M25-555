@@ -8,6 +8,7 @@ from .constants import (
     RANDOM_EVENT_PROBABILITY,
     ROOMS,
     STEPS_TAKEN,
+    TRAP_ROOM,
 )
 
 
@@ -99,7 +100,7 @@ def solve_puzzle(game_state: dict):
         room_data["puzzle"] = None
     else:
         print("Неверно. Попробуйте снова.")
-        if current_room == "trap_room":
+        if current_room == TRAP_ROOM:
             trigger_trap(game_state)
 
 
@@ -230,7 +231,7 @@ def random_event(game_state: dict):
                 if "sword" in inventory:
                     print("Вы хватаетесь за меч и отпугиваете монстра.")
             case 2:
-                in_trap_room = game_state[CURRENT_ROOM] == "trap_room"
+                in_trap_room = game_state[CURRENT_ROOM] == TRAP_ROOM
                 no_torch = "torch" not in inventory
                 if in_trap_room and no_torch:
                     print("Вы чувствуете опасность.")

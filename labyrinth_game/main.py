@@ -2,13 +2,21 @@
 
 from sys import exit
 
-from .constants import COMMANDS, CURRENT_ROOM, GAME_OVER, PLAYER_INVENTORY, STEPS_TAKEN
+from .constants import (
+    COMMANDS,
+    CURRENT_ROOM,
+    ENTRANCE,
+    GAME_OVER,
+    PLAYER_INVENTORY,
+    STEPS_TAKEN,
+    TREASURE_ROOM,
+)
 from .player_actions import get_input, move_player, show_inventory, take_item, use_item
 from .utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
 
 game_state = {
     PLAYER_INVENTORY: [],  # Инвентарь игрока
-    CURRENT_ROOM: "entrance",  # Текущая комната
+    CURRENT_ROOM: ENTRANCE,  # Текущая комната
     GAME_OVER: False,  # Значения окончания игры
     STEPS_TAKEN: 0,  # Количество шагов
 }
@@ -31,7 +39,7 @@ def process_command(game_state: dict, command: str):
     else:
         cmd, arg = parts
 
-    in_treasure_room = game_state[CURRENT_ROOM] == "treasure_room"
+    in_treasure_room = game_state[CURRENT_ROOM] == TREASURE_ROOM
     arg_is_treasure = arg == "treasure chest"
 
     match cmd:

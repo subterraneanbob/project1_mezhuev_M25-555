@@ -1,4 +1,4 @@
-from .constants import CURRENT_ROOM, PLAYER_INVENTORY, STEPS_TAKEN
+from .constants import CURRENT_ROOM, PLAYER_INVENTORY, STEPS_TAKEN, TREASURE_ROOM
 from .utils import describe_current_room, get_room_data, random_event
 
 
@@ -46,7 +46,7 @@ def move_player(game_state: dict, direction: str):
     exits = room_data["exits"]
 
     if direction in exits:
-        if (next_room := exits[direction]) == "treasure_room":
+        if (next_room := exits[direction]) == TREASURE_ROOM:
             inventory = game_state[PLAYER_INVENTORY]
             if "rusty key" in inventory:
                 print(
