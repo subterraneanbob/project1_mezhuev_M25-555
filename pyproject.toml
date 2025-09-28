@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "project1-mezhuev-m25-555"
 version = "0.1.0"
-description = ""
-authors = ["subterraneanbob <4823336+subterraneanbob@users.noreply.github.com>"]
+description = "Лабиринт сокровищ - текстовая приключенческая игра"
+authors = ["Pavel Mezhuev <mp710@ya.ru>"]
 readme = "README.md"
 packages = [{ include = "labyrinth_game" }]
 
