@@ -1,3 +1,4 @@
+from .constants import CURRENT_ROOM, PLAYER_INVENTORY, STEPS_TAKEN
 from .utils import describe_current_room, get_room_data, random_event
 
 
@@ -9,7 +10,7 @@ def show_inventory(game_state: dict):
         game_state (dict): Текущее состояние игры.
     """
 
-    if inventory := game_state["player_inventory"]:
+    if inventory := game_state[PLAYER_INVENTORY]:
         print(f"Инвентарь: {', '.join(inventory)}")
     else:
         print("Инвентарь пуст.")
@@ -41,12 +42,12 @@ def move_player(game_state: dict, direction: str):
         direction (str): Направление движения.
     """
 
-    room_data = get_room_data(game_state["current_room"])
+    room_data = get_room_data(game_state[CURRENT_ROOM])
     exits = room_data["exits"]
 
     if direction in exits:
         if (next_room := exits[direction]) == "treasure_room":
-            inventory = game_state["player_inventory"]
+            inventory = game_state[PLAYER_INVENTORY]
             if "rusty key" in inventory:
                 print(
                     "Вы используете найденный ключ, чтобы открыть путь в "
@@ -56,8 +57,8 @@ def move_player(game_state: dict, direction: str):
                 print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
                 return  # Не переходим в след. комнату
 
-        game_state["current_room"] = next_room
-        game_state["steps_taken"] += 1
+        game_state[CURRENT_ROOM] = next_room
+        game_state[STEPS_TAKEN] += 1
         describe_current_room(game_state)
         random_event(game_state)
     else:
@@ -74,11 +75,11 @@ def take_item(game_state: dict, item_name: str):
         item_name (str): Название предмета.
     """
 
-    room_data = get_room_data(game_state["current_room"])
+    room_data = get_room_data(game_state[CURRENT_ROOM])
     room_items = room_data["items"]
 
     if item_name in room_items:
-        game_state["player_inventory"].append(item_name)
+        game_state[PLAYER_INVENTORY].append(item_name)
         room_items.remove(item_name)
         print(f"Вы подняли: {item_name}")
     else:
@@ -94,7 +95,7 @@ def use_item(game_state: dict, item_name: str):
         item_name (str): Название предмета.
     """
 
-    available_items = game_state["player_inventory"]
+    available_items = game_state[PLAYER_INVENTORY]
 
     if item_name not in available_items:
         print("У вас нет такого предмета.")

@@ -1,6 +1,14 @@
 from math import floor, sin
 
-from .constants import DEATH_TRAP_PROBABILITY, RANDOM_EVENT_PROBABILITY, ROOMS
+from .constants import (
+    CURRENT_ROOM,
+    DEATH_TRAP_PROBABILITY,
+    GAME_OVER,
+    PLAYER_INVENTORY,
+    RANDOM_EVENT_PROBABILITY,
+    ROOMS,
+    STEPS_TAKEN,
+)
 
 
 def describe_current_room(game_state: dict):
@@ -11,7 +19,7 @@ def describe_current_room(game_state: dict):
         game_state (dict): Текущее состояние игры.
     """
 
-    current_room = game_state["current_room"]
+    current_room = game_state[CURRENT_ROOM]
     room_data = get_room_data(current_room)
 
     room_name = current_room.replace("_", " ").upper()
@@ -78,7 +86,7 @@ def solve_puzzle(game_state: dict):
         game_state (dict): Текущее состояние игры.
     """
 
-    current_room = game_state["current_room"]
+    current_room = game_state[CURRENT_ROOM]
     room_data = get_room_data(current_room)
 
     if not (puzzle := room_data["puzzle"]):
@@ -87,7 +95,7 @@ def solve_puzzle(game_state: dict):
 
     if reward := challenge_player(puzzle):
         print(f"Вы успешно решили загадку и получаете награду: {reward}")
-        game_state["player_inventory"].append(reward)
+        game_state[PLAYER_INVENTORY].append(reward)
         room_data["puzzle"] = None
     else:
         print("Неверно. Попробуйте снова.")
@@ -109,16 +117,16 @@ def attempt_open_treasure(game_state: dict):
         print(message)
         room_data["items"].remove(treasure_chest)
         print("В сундуке сокровище! Вы победили!")
-        game_state["game_over"] = True
+        game_state[GAME_OVER] = True
 
-    room_data = get_room_data(game_state["current_room"])
+    room_data = get_room_data(game_state[CURRENT_ROOM])
     room_items = room_data["items"]
 
     if treasure_chest not in room_items:
         print("Сундук уже открыт или отсутствует.")
         return
 
-    if "treasure key" in game_state["player_inventory"]:
+    if "treasure key" in game_state[PLAYER_INVENTORY]:
         open_chest(
             game_state,
             room_data,
@@ -184,8 +192,8 @@ def trigger_trap(game_state: dict):
 
     print("Ловушка активирована! Пол стал дрожать...")
 
-    inventory = game_state["player_inventory"]
-    seed = game_state["steps_taken"]
+    inventory = game_state[PLAYER_INVENTORY]
+    seed = game_state[STEPS_TAKEN]
 
     if inventory:
         index = pseudo_random(seed, len(inventory))
@@ -193,7 +201,7 @@ def trigger_trap(game_state: dict):
         print(f"Вам удаётся избежать ловушки, но вы теряете {item_lost}")
     elif pseudo_random(seed, 100) < DEATH_TRAP_PROBABILITY:
         print("Вам не удаётся избежать ловушки, и вы погибаете. Поражение!")
-        game_state["game_over"] = True
+        game_state[GAME_OVER] = True
     else:
         print("Вам чудом удалось избежать смертельной ловушки.")
 
@@ -206,23 +214,23 @@ def random_event(game_state: dict):
         game_state (dict): Текущее состояние игры.
     """
 
-    seed = game_state["steps_taken"]
+    seed = game_state[STEPS_TAKEN]
 
     if pseudo_random(seed, 100) < RANDOM_EVENT_PROBABILITY:
-        inventory = game_state["player_inventory"]
+        inventory = game_state[PLAYER_INVENTORY]
 
         match pseudo_random(seed, 3):
             case 0:
                 print("Удача! Вы увидели на полу комнаты монетку.")
                 coin = "coin"
-                room_data = get_room_data(game_state["current_room"])
+                room_data = get_room_data(game_state[CURRENT_ROOM])
                 room_data["items"].append(coin)
             case 1:
                 print("Вы слышите какой-то шорох.")
                 if "sword" in inventory:
                     print("Вы хватаетесь за меч и отпугиваете монстра.")
             case 2:
-                in_trap_room = game_state["current_room"] == "trap_room"
+                in_trap_room = game_state[CURRENT_ROOM] == "trap_room"
                 no_torch = "torch" not in inventory
                 if in_trap_room and no_torch:
                     print("Вы чувствуете опасность.")

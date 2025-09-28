@@ -1,3 +1,10 @@
+# Ключи game_state
+PLAYER_INVENTORY = "player_inventory"
+CURRENT_ROOM = "current_room"
+GAME_OVER = "game_over"
+STEPS_TAKEN = "steps_taken"
+
+
 ROOMS = {
     "entrance": {
         "description": "Вы в темном входе лабиринта...",
