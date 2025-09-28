@@ -63,9 +63,6 @@ def process_command(game_state: dict, command: str):
         case "help":
             show_help(COMMANDS)
 
-    if game_state["game_over"]:
-        print("Поздравляем!")
-
 
 def main():
     print("Добро пожаловать в Лабиринт сокровищ!")
