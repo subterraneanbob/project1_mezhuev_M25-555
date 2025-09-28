@@ -1,4 +1,4 @@
-from .utils import describe_current_room, get_room_data
+from .utils import describe_current_room, get_room_data, random_event
 
 
 def show_inventory(game_state: dict):
@@ -48,6 +48,7 @@ def move_player(game_state: dict, direction: str):
         game_state["current_room"] = exits[direction]
         game_state["steps_taken"] += 1
         describe_current_room(game_state)
+        random_event(game_state)
     else:
         print("Нельзя пойти в этом направлении.")
 

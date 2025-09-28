@@ -1,6 +1,6 @@
 from math import floor, sin
 
-from .constants import DEATH_TRAP_PROBABILITY, ROOMS
+from .constants import DEATH_TRAP_PROBABILITY, RANDOM_EVENT_PROBABILITY, ROOMS
 
 
 def describe_current_room(game_state: dict):
@@ -176,3 +176,34 @@ def trigger_trap(game_state: dict):
         game_state["game_over"] = True
     else:
         print("Вам чудом удалось избежать смертельной ловушки.")
+
+
+def random_event(game_state: dict):
+    """
+    Выполняет действия, которые происходят при случайном событии.
+
+    Args:
+        game_state (dict): Текущее состояние игры.
+    """
+
+    seed = game_state["steps_taken"]
+
+    if pseudo_random(seed, 100) < RANDOM_EVENT_PROBABILITY:
+        inventory = game_state["player_inventory"]
+
+        match pseudo_random(seed, 3):
+            case 0:
+                print("Удача! Вы увидели на полу комнаты монетку.")
+                coin = "coin"
+                room_data = get_room_data(game_state["current_room"])
+                room_data["items"].append(coin)
+            case 1:
+                print("Вы слышите какой-то шорох.")
+                if "sword" in inventory:
+                    print("Вы хватаетесь за меч и отпугиваете монстра.")
+            case 2:
+                in_trap_room = game_state["current_room"] == "trap_room"
+                no_torch = "torch" not in inventory
+                if in_trap_room and no_torch:
+                    print("Вы чувствуете опасность.")
+                    trigger_trap(game_state)
