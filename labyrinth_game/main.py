@@ -3,7 +3,7 @@
 from sys import exit
 
 from .player_actions import get_input, move_player, show_inventory, take_item, use_item
-from .utils import attempt_open_treasure, describe_current_room, solve_puzzle
+from .utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
 
 game_state = {
     "player_inventory": [],  # Инвентарь игрока
@@ -58,6 +58,8 @@ def process_command(game_state: dict, command: str):
         case "quit" | "exit":
             print("\nВыход из игры.")
             exit(0)
+        case "help":
+            show_help()
 
     if game_state["game_over"]:
         print("Поздравляем!")
