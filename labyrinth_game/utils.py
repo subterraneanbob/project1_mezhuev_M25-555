@@ -64,3 +64,49 @@ def solve_puzzle(game_state: dict):
         room_data["puzzle"] = None
     else:
         print("Неверно. Попробуйте снова.")
+
+
+def attempt_open_treasure(game_state: dict):
+    """
+    Пытается открыть сундук с сокровищами, проверяя наличие ключа у игрока или
+    загадывая ему загадку. Если игрок успешно справился, то игра завершается.
+
+    Args:
+        game_state (dict): Текущее состояние игры.
+    """
+    treasure_chest = "treasure chest"
+
+    def open_chest(game_state: dict, room_data: dict, message: str):
+        print(message)
+        room_data["items"].remove(treasure_chest)
+        print("В сундуке сокровище! Вы победили!")
+        game_state["game_over"] = True
+
+    room_data = get_room_data(game_state["current_room"])
+    room_items = room_data["items"]
+
+    if treasure_chest not in room_items:
+        print("Сундук уже открыт или отсутствует.")
+        return
+
+    inventory = game_state["player_inventory"]
+    keys = ["treasure key", "rusty key"]
+
+    if any(k in inventory for k in keys):
+        open_chest(
+            game_state,
+            room_data,
+            "Вы применяете ключ, и замок щёлкает. Сундук открыт!",
+        )
+    elif input("Сундук заперт. ... Ввести код? (да/нет) ").strip() == "да":
+        question, answer = room_data["puzzle"]
+        if input(question).strip() == answer:
+            open_chest(
+                game_state,
+                room_data,
+                "Вы ввели верный код, и замок щёлкает. Сундук открыт!",
+            )
+        else:
+            print("Похоже, что код неверный.")
+    else:
+        print("Вы отступаете от сундука.")
