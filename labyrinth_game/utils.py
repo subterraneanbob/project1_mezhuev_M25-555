@@ -51,6 +51,12 @@ def solve_puzzle(game_state: dict):
         game_state (dict): Текущее состояние игры.
     """
 
+    def check_answer(user_input: str, answer: object) -> bool:
+        if hasattr(answer, "__iter__") and not isinstance(answer, str):
+            return user_input in answer
+        else:
+            return user_input == answer
+
     room_data = get_room_data(game_state["current_room"])
 
     if not (puzzle := room_data["puzzle"]):
@@ -59,8 +65,9 @@ def solve_puzzle(game_state: dict):
 
     puzzle_text, answer = puzzle
     print(puzzle_text)
+    user_input = input("Ваш ответ: ").strip()
 
-    if input("Ваш ответ: ").strip() == answer:
+    if check_answer(user_input, answer):
         print("Вы успешно решили загадку и получаете награду.")
         game_state["player_inventory"].append("valuable coin")
         room_data["puzzle"] = None
