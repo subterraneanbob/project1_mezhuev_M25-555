@@ -118,10 +118,7 @@ def attempt_open_treasure(game_state: dict):
         print("Сундук уже открыт или отсутствует.")
         return
 
-    inventory = game_state["player_inventory"]
-    keys = ["treasure key", "rusty key"]
-
-    if any(k in inventory for k in keys):
+    if "treasure key" in game_state["player_inventory"]:
         open_chest(
             game_state,
             room_data,

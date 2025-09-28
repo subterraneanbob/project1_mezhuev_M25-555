@@ -47,8 +47,7 @@ def move_player(game_state: dict, direction: str):
     if direction in exits:
         if (next_room := exits[direction]) == "treasure_room":
             inventory = game_state["player_inventory"]
-            keys = ["treasure key", "rusty key"]
-            if any(k in inventory for k in keys):
+            if "rusty key" in inventory:
                 print(
                     "Вы используете найденный ключ, чтобы открыть путь в "
                     "комнату сокровищ."
