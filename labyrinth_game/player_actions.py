@@ -1,9 +1,13 @@
 from .constants import (
+    BRONZE_BOX,
     CURRENT_ROOM,
     EXITS,
     ITEMS,
     PLAYER_INVENTORY,
+    RUSTY_KEY,
     STEPS_TAKEN,
+    SWORD,
+    TORCH,
     TREASURE_ROOM,
 )
 from .utils import describe_current_room, get_room_data, random_event
@@ -55,7 +59,7 @@ def move_player(game_state: dict, direction: str):
     if direction in exits:
         if (next_room := exits[direction]) == TREASURE_ROOM:
             inventory = game_state[PLAYER_INVENTORY]
-            if "rusty key" in inventory:
+            if RUSTY_KEY in inventory:
                 print(
                     "Вы используете найденный ключ, чтобы открыть путь в "
                     "комнату сокровищ."
@@ -109,16 +113,15 @@ def use_item(game_state: dict, item_name: str):
         return
 
     match item_name:
-        case "torch":
+        case _ if item_name == TORCH:
             print("Вы зажигаете факел, и становится светлее.")
-        case "sword":
+        case _ if item_name == SWORD:
             print("Вы сжимаете меч в руке, и это добавляет вам уверенности.")
-        case "bronze box":
-            rusty_key = "rusty key"
-            if rusty_key in available_items:
+        case _ if item_name == BRONZE_BOX:
+            if RUSTY_KEY in available_items:
                 print("Коробка пуста.")
             else:
                 print("Вы открываете шкатулку и достаёте оттуда ржавый ключ.")
-                available_items.append(rusty_key)
+                available_items.append(RUSTY_KEY)
         case _:
             print("Вы не знаете, как использовать этот предмет.")

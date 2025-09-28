@@ -1,6 +1,7 @@
 from math import floor, sin
 
 from .constants import (
+    COIN,
     CURRENT_ROOM,
     DEATH_TRAP_PROBABILITY,
     DESCRIPTION,
@@ -12,7 +13,12 @@ from .constants import (
     RANDOM_EVENT_PROBABILITY,
     ROOMS,
     STEPS_TAKEN,
+    SWORD,
+    TORCH,
     TRAP_ROOM,
+    TREASURE_CHEST,
+    TREASURE_KEY,
+    VALUABLE_COIN,
 )
 
 
@@ -68,7 +74,7 @@ def challenge_player(puzzle: tuple) -> str | None:
     """
 
     question, answer = puzzle[:2]
-    reward = puzzle[2] if len(puzzle) > 2 else "valuable coin"
+    reward = puzzle[2] if len(puzzle) > 2 else VALUABLE_COIN
 
     print(question)
     user_input = input("Ваш ответ: ").strip()
@@ -116,22 +122,20 @@ def attempt_open_treasure(game_state: dict):
     Args:
         game_state (dict): Текущее состояние игры.
     """
-    treasure_chest = "treasure chest"
 
     def open_chest(game_state: dict, room_data: dict, message: str):
         print(message)
-        room_data[ITEMS].remove(treasure_chest)
+        room_data[ITEMS].remove(TREASURE_CHEST)
         print("В сундуке сокровище! Вы победили!")
         game_state[GAME_OVER] = True
 
     room_data = get_room_data(game_state[CURRENT_ROOM])
-    room_items = room_data[ITEMS]
 
-    if treasure_chest not in room_items:
+    if TREASURE_CHEST not in room_data[ITEMS]:
         print("Сундук уже открыт или отсутствует.")
         return
 
-    if "treasure key" in game_state[PLAYER_INVENTORY]:
+    if TREASURE_KEY in game_state[PLAYER_INVENTORY]:
         open_chest(
             game_state,
             room_data,
@@ -227,16 +231,15 @@ def random_event(game_state: dict):
         match pseudo_random(seed, 3):
             case 0:
                 print("Удача! Вы увидели на полу комнаты монетку.")
-                coin = "coin"
                 room_data = get_room_data(game_state[CURRENT_ROOM])
-                room_data[ITEMS].append(coin)
+                room_data[ITEMS].append(COIN)
             case 1:
                 print("Вы слышите какой-то шорох.")
-                if "sword" in inventory:
+                if SWORD in inventory:
                     print("Вы хватаетесь за меч и отпугиваете монстра.")
             case 2:
                 in_trap_room = game_state[CURRENT_ROOM] == TRAP_ROOM
-                no_torch = "torch" not in inventory
+                no_torch = TORCH not in inventory
                 if in_trap_room and no_torch:
                     print("Вы чувствуете опасность.")
                     trigger_trap(game_state)

@@ -27,12 +27,22 @@ WEST = "west"
 EAST = "east"
 DIRECTIONS = (NORTH, SOUTH, WEST, EAST)
 
+# Ключевые предметы
+TORCH = "torch"
+TREASURE_KEY = "treasure key"  # Открывает сундук с сокровищами
+RUSTY_KEY = "rusty key"  # Открывает дверь к сокровищам
+SWORD = "sword"
+BRONZE_BOX = "bronze box"
+TREASURE_CHEST = "treasure chest"
+COIN = "coin"
+VALUABLE_COIN = "valuable coin"  # Награда по-умолчанию, если не указана явно
+
 
 ROOMS = {
     ENTRANCE: {
         DESCRIPTION: "Вы в темном входе лабиринта...",
         EXITS: {NORTH: HALL, EAST: TRAP_ROOM},
-        ITEMS: ["torch"],
+        ITEMS: [TORCH],
         PUZZLE: None,
     },
     HALL: {
@@ -47,13 +57,13 @@ ROOMS = {
         PUZZLE: (
             'На пьедестале надпись: "Назовите число, которое идет после девяти". Введите ответ цифрой или словом.',  # noqa: E501
             ("10", "десять", "ten"),
-            "treasure key",
+            TREASURE_KEY,
         ),
     },
     TRAP_ROOM: {
         DESCRIPTION: 'Комната с хитрой плиточной поломкой. На стене видна надпись: "Осторожно — ловушка".',  # noqa: E501
         EXITS: {WEST: ENTRANCE, EAST: LABORATORY},
-        ITEMS: ["rusty key"],
+        ITEMS: [RUSTY_KEY],
         PUZZLE: (
             'Система плит активна. Чтобы пройти, назовите слово "шаг" три раза подряд (введите "шаг шаг шаг")',  # noqa: E501
             "шаг шаг шаг",
@@ -66,19 +76,19 @@ ROOMS = {
         PUZZLE: (
             'В одном свитке загадка: "Что растет, когда его съедают?" (ответ одно слово)',  # noqa: E501
             "резонанс",
-            "rusty key",
+            RUSTY_KEY,
         ),
     },
     ARMORY: {
         DESCRIPTION: "Старая оружейная комната. На стене висит меч, рядом — небольшая бронзовая шкатулка.",  # noqa: E501
         EXITS: {SOUTH: LIBRARY},
-        ITEMS: ["sword", "bronze box"],
+        ITEMS: [SWORD, BRONZE_BOX],
         PUZZLE: None,
     },
     TREASURE_ROOM: {
         DESCRIPTION: "Комната, на столе большой сундук. Дверь заперта — нужен особый ключ.",  # noqa: E501
         EXITS: {SOUTH: HALL},
-        ITEMS: ["treasure chest"],
+        ITEMS: [TREASURE_CHEST],
         PUZZLE: (
             "Дверь защищена кодом. Введите код (подсказка: это число пятикратного шага, 2*5= ? ): ",  # noqa: E501
             ("10", "десять", "ten"),

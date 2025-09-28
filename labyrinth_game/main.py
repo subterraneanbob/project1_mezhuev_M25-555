@@ -10,6 +10,7 @@ from .constants import (
     GAME_OVER,
     PLAYER_INVENTORY,
     STEPS_TAKEN,
+    TREASURE_CHEST,
     TREASURE_ROOM,
 )
 from .player_actions import get_input, move_player, show_inventory, take_item, use_item
@@ -41,7 +42,7 @@ def process_command(game_state: dict, command: str):
         cmd, arg = parts
 
     in_treasure_room = game_state[CURRENT_ROOM] == TREASURE_ROOM
-    arg_is_treasure = arg == "treasure chest"
+    arg_is_treasure = arg == TREASURE_CHEST
 
     match cmd:
         case "look":
