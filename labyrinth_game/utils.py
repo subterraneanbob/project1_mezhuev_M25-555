@@ -1,3 +1,5 @@
+from math import floor, sin
+
 from .constants import ROOMS
 
 
@@ -126,3 +128,25 @@ def show_help():
     print("  solve           - попытаться решить загадку в комнате")
     print("  quit            - выйти из игры")
     print("  help            - показать это сообщение")
+
+
+def pseudo_random(seed: int, modulo: int) -> int:
+    """
+    Возвращает псевдо-случайное целое число в диапазоне [0; modulo),
+    используя заданное зерно случайности seed.
+
+    Args:
+        seed (int): Зерно случайности.
+        modulo (int): Число для определения диапазона.
+    Returns:
+        int: Псевдо-случайное число.
+    """
+
+    # Вычисляем псевдо-случайное число
+    random_number = sin(seed * 12.9898) * 43758.5453
+
+    # Оставляем только дробную часть
+    fraction = random_number - floor(random_number)
+
+    # Приводим к требуемому диапазону и отбрасываем дробную часть
+    return int(fraction * modulo)
