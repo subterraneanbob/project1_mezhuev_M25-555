@@ -3,8 +3,12 @@ from math import floor, sin
 from .constants import (
     CURRENT_ROOM,
     DEATH_TRAP_PROBABILITY,
+    DESCRIPTION,
+    EXITS,
     GAME_OVER,
+    ITEMS,
     PLAYER_INVENTORY,
+    PUZZLE,
     RANDOM_EVENT_PROBABILITY,
     ROOMS,
     STEPS_TAKEN,
@@ -25,15 +29,15 @@ def describe_current_room(game_state: dict):
 
     room_name = current_room.replace("_", " ").upper()
     print(f"== {room_name} ==")
-    print(room_data["description"])
+    print(room_data[DESCRIPTION])
 
-    if items := room_data["items"]:
+    if items := room_data[ITEMS]:
         print(f"Заметные предметы: {', '.join(items)}")
 
-    exits = room_data["exits"].keys()
+    exits = room_data[EXITS].keys()
     print(f"Выходы: {', '.join(exits)}")
 
-    if room_data["puzzle"]:
+    if room_data[PUZZLE]:
         print("Кажется, здесь есть загадка (используйте команду solve).")
 
 
@@ -90,14 +94,14 @@ def solve_puzzle(game_state: dict):
     current_room = game_state[CURRENT_ROOM]
     room_data = get_room_data(current_room)
 
-    if not (puzzle := room_data["puzzle"]):
+    if not (puzzle := room_data[PUZZLE]):
         print("Загадок здесь нет.")
         return
 
     if reward := challenge_player(puzzle):
         print(f"Вы успешно решили загадку и получаете награду: {reward}")
         game_state[PLAYER_INVENTORY].append(reward)
-        room_data["puzzle"] = None
+        room_data[PUZZLE] = None
     else:
         print("Неверно. Попробуйте снова.")
         if current_room == TRAP_ROOM:
@@ -116,12 +120,12 @@ def attempt_open_treasure(game_state: dict):
 
     def open_chest(game_state: dict, room_data: dict, message: str):
         print(message)
-        room_data["items"].remove(treasure_chest)
+        room_data[ITEMS].remove(treasure_chest)
         print("В сундуке сокровище! Вы победили!")
         game_state[GAME_OVER] = True
 
     room_data = get_room_data(game_state[CURRENT_ROOM])
-    room_items = room_data["items"]
+    room_items = room_data[ITEMS]
 
     if treasure_chest not in room_items:
         print("Сундук уже открыт или отсутствует.")
@@ -134,7 +138,7 @@ def attempt_open_treasure(game_state: dict):
             "Вы применяете ключ, и замок щёлкает. Сундук открыт!",
         )
     elif input("Сундук заперт. ... Ввести код? (да/нет) ").strip() == "да":
-        if challenge_player(room_data["puzzle"]):
+        if challenge_player(room_data[PUZZLE]):
             open_chest(
                 game_state,
                 room_data,
@@ -225,7 +229,7 @@ def random_event(game_state: dict):
                 print("Удача! Вы увидели на полу комнаты монетку.")
                 coin = "coin"
                 room_data = get_room_data(game_state[CURRENT_ROOM])
-                room_data["items"].append(coin)
+                room_data[ITEMS].append(coin)
             case 1:
                 print("Вы слышите какой-то шорох.")
                 if "sword" in inventory:

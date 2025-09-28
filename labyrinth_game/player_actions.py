@@ -1,4 +1,11 @@
-from .constants import CURRENT_ROOM, PLAYER_INVENTORY, STEPS_TAKEN, TREASURE_ROOM
+from .constants import (
+    CURRENT_ROOM,
+    EXITS,
+    ITEMS,
+    PLAYER_INVENTORY,
+    STEPS_TAKEN,
+    TREASURE_ROOM,
+)
 from .utils import describe_current_room, get_room_data, random_event
 
 
@@ -43,7 +50,7 @@ def move_player(game_state: dict, direction: str):
     """
 
     room_data = get_room_data(game_state[CURRENT_ROOM])
-    exits = room_data["exits"]
+    exits = room_data[EXITS]
 
     if direction in exits:
         if (next_room := exits[direction]) == TREASURE_ROOM:
@@ -76,7 +83,7 @@ def take_item(game_state: dict, item_name: str):
     """
 
     room_data = get_room_data(game_state[CURRENT_ROOM])
-    room_items = room_data["items"]
+    room_items = room_data[ITEMS]
 
     if item_name in room_items:
         game_state[PLAYER_INVENTORY].append(item_name)
