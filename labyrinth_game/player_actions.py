@@ -45,7 +45,19 @@ def move_player(game_state: dict, direction: str):
     exits = room_data["exits"]
 
     if direction in exits:
-        game_state["current_room"] = exits[direction]
+        if (next_room := exits[direction]) == "treasure_room":
+            inventory = game_state["player_inventory"]
+            keys = ["treasure key", "rusty key"]
+            if any(k in inventory for k in keys):
+                print(
+                    "Вы используете найденный ключ, чтобы открыть путь в "
+                    "комнату сокровищ."
+                )
+            else:
+                print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
+                return  # Не переходим в след. комнату
+
+        game_state["current_room"] = next_room
         game_state["steps_taken"] += 1
         describe_current_room(game_state)
         random_event(game_state)
