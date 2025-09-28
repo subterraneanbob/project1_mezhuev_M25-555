@@ -42,6 +42,33 @@ def get_room_data(room_name: str) -> dict:
     return ROOMS[room_name] if room_name in ROOMS else {}
 
 
+def challenge_player(puzzle: tuple) -> str | None:
+    """
+    Загадывает игроку загадку и проверяет его ответ. Если ответ верный, возвращает
+    строку с названием предмета, который получен в качестве награды.
+
+    Args:
+        puzzle (tuple): Загадка, правильный ответ и опциональная награда
+        (кортеж из 2 или 3 значений).
+    Returns:
+        str | None: Предмет-награда или None, если загадка не была решена.
+    """
+
+    question, answer = puzzle[:2]
+    reward = puzzle[2] if len(puzzle) > 2 else "valuable coin"
+
+    print(question)
+    user_input = input("Ваш ответ: ").strip()
+
+    if hasattr(answer, "__iter__") and not isinstance(answer, str):
+        correct = user_input in answer
+    else:
+        correct = user_input == answer
+
+    if correct:
+        return reward
+
+
 def solve_puzzle(game_state: dict):
     """
     Пытается решить загадку, выводя её текст и проверяя полученный
@@ -51,28 +78,21 @@ def solve_puzzle(game_state: dict):
         game_state (dict): Текущее состояние игры.
     """
 
-    def check_answer(user_input: str, answer: object) -> bool:
-        if hasattr(answer, "__iter__") and not isinstance(answer, str):
-            return user_input in answer
-        else:
-            return user_input == answer
-
-    room_data = get_room_data(game_state["current_room"])
+    current_room = game_state["current_room"]
+    room_data = get_room_data(current_room)
 
     if not (puzzle := room_data["puzzle"]):
         print("Загадок здесь нет.")
         return
 
-    puzzle_text, answer = puzzle
-    print(puzzle_text)
-    user_input = input("Ваш ответ: ").strip()
-
-    if check_answer(user_input, answer):
-        print("Вы успешно решили загадку и получаете награду.")
-        game_state["player_inventory"].append("valuable coin")
+    if reward := challenge_player(puzzle):
+        print(f"Вы успешно решили загадку и получаете награду: {reward}")
+        game_state["player_inventory"].append(reward)
         room_data["puzzle"] = None
     else:
         print("Неверно. Попробуйте снова.")
+        if current_room == "trap_room":
+            trigger_trap(game_state)
 
 
 def attempt_open_treasure(game_state: dict):
@@ -108,8 +128,7 @@ def attempt_open_treasure(game_state: dict):
             "Вы применяете ключ, и замок щёлкает. Сундук открыт!",
         )
     elif input("Сундук заперт. ... Ввести код? (да/нет) ").strip() == "да":
-        question, answer = room_data["puzzle"]
-        if input(question).strip() == answer:
+        if challenge_player(room_data["puzzle"]):
             open_chest(
                 game_state,
                 room_data,
