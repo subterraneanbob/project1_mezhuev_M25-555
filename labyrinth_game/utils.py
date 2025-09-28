@@ -1,6 +1,6 @@
 from math import floor, sin
 
-from .constants import ROOMS
+from .constants import DEATH_TRAP_PROBABILITY, ROOMS
 
 
 def describe_current_room(game_state: dict):
@@ -150,3 +150,29 @@ def pseudo_random(seed: int, modulo: int) -> int:
 
     # Приводим к требуемому диапазону и отбрасываем дробную часть
     return int(fraction * modulo)
+
+
+def trigger_trap(game_state: dict):
+    """
+    Выполняет действия при срабатывании ловушки. Если у игрока есть предметы
+    в инвентаре, то он теряет один случайный предмет. В противном случае
+    есть шанс, что игрок погибнет, и игра завершится.
+
+    Args:
+        game_state (dict): Текущее состояние игры.
+    """
+
+    print("Ловушка активирована! Пол стал дрожать...")
+
+    inventory = game_state["player_inventory"]
+    seed = game_state["steps_taken"]
+
+    if inventory:
+        index = pseudo_random(seed, len(inventory))
+        item_lost = inventory.pop(index)
+        print(f"Вам удаётся избежать ловушки, но вы теряете {item_lost}")
+    elif pseudo_random(seed, 100) < DEATH_TRAP_PROBABILITY:
+        print("Вам не удаётся избежать ловушки, и вы погибаете. Поражение!")
+        game_state["game_over"] = True
+    else:
+        print("Вам чудом удалось избежать смертельной ловушки.")

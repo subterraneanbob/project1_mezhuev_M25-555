@@ -68,3 +68,5 @@ ROOMS = {
         "puzzle": None,
     },
 }
+
+DEATH_TRAP_PROBABILITY = 30  # Вероятность смерти при попадании в ловушку, %
