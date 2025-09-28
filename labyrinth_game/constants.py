@@ -20,21 +20,28 @@ EXITS = "exits"
 ITEMS = "items"
 PUZZLE = "puzzle"
 
+# Направления движения
+NORTH = "north"
+SOUTH = "south"
+WEST = "west"
+EAST = "east"
+DIRECTIONS = (NORTH, SOUTH, WEST, EAST)
+
 
 ROOMS = {
     ENTRANCE: {
         DESCRIPTION: "Вы в темном входе лабиринта...",
-        EXITS: {"north": HALL, "east": TRAP_ROOM},
+        EXITS: {NORTH: HALL, EAST: TRAP_ROOM},
         ITEMS: ["torch"],
         PUZZLE: None,
     },
     HALL: {
         DESCRIPTION: "Большой зал с эхом. По центру стоит пьедестал с запечатанным сундуком.",  # noqa: E501
         EXITS: {
-            "south": ENTRANCE,
-            "west": LIBRARY,
-            "north": TREASURE_ROOM,
-            "east": STORAGE_ROOM,
+            SOUTH: ENTRANCE,
+            WEST: LIBRARY,
+            NORTH: TREASURE_ROOM,
+            EAST: STORAGE_ROOM,
         },
         ITEMS: [],
         PUZZLE: (
@@ -45,7 +52,7 @@ ROOMS = {
     },
     TRAP_ROOM: {
         DESCRIPTION: 'Комната с хитрой плиточной поломкой. На стене видна надпись: "Осторожно — ловушка".',  # noqa: E501
-        EXITS: {"west": ENTRANCE, "east": LABORATORY},
+        EXITS: {WEST: ENTRANCE, EAST: LABORATORY},
         ITEMS: ["rusty key"],
         PUZZLE: (
             'Система плит активна. Чтобы пройти, назовите слово "шаг" три раза подряд (введите "шаг шаг шаг")',  # noqa: E501
@@ -54,7 +61,7 @@ ROOMS = {
     },
     LIBRARY: {
         DESCRIPTION: "Пыльная библиотека. На полках старые свитки. Где-то здесь может быть ключ от сокровищницы.",  # noqa: E501
-        EXITS: {"east": HALL, "north": ARMORY},
+        EXITS: {EAST: HALL, NORTH: ARMORY},
         ITEMS: ["ancient book"],
         PUZZLE: (
             'В одном свитке загадка: "Что растет, когда его съедают?" (ответ одно слово)',  # noqa: E501
@@ -64,13 +71,13 @@ ROOMS = {
     },
     ARMORY: {
         DESCRIPTION: "Старая оружейная комната. На стене висит меч, рядом — небольшая бронзовая шкатулка.",  # noqa: E501
-        EXITS: {"south": LIBRARY},
+        EXITS: {SOUTH: LIBRARY},
         ITEMS: ["sword", "bronze box"],
         PUZZLE: None,
     },
     TREASURE_ROOM: {
         DESCRIPTION: "Комната, на столе большой сундук. Дверь заперта — нужен особый ключ.",  # noqa: E501
-        EXITS: {"south": HALL},
+        EXITS: {SOUTH: HALL},
         ITEMS: ["treasure chest"],
         PUZZLE: (
             "Дверь защищена кодом. Введите код (подсказка: это число пятикратного шага, 2*5= ? ): ",  # noqa: E501
@@ -79,7 +86,7 @@ ROOMS = {
     },
     LABORATORY: {
         DESCRIPTION: "Похоже, что это лаборатория. Везде расставлены пробирки и газовые горелки. На полке — записная книжка с пометками о реакциях.",  # noqa: E501
-        EXITS: {"west": TRAP_ROOM},
+        EXITS: {WEST: TRAP_ROOM},
         ITEMS: ["alchemist's notes"],
         PUZZLE: (
             "Белый порошок в воде тает, пеною бурлит — кто я?",
@@ -88,7 +95,7 @@ ROOMS = {
     },
     STORAGE_ROOM: {
         DESCRIPTION: "Склад с бочками и ящиками разных размеров. Порывшись в них, вы, к сожалению, не находите ничего полезного.",  # noqa: E501
-        EXITS: {"west": HALL},
+        EXITS: {WEST: HALL},
         ITEMS: [],
         PUZZLE: None,
     },

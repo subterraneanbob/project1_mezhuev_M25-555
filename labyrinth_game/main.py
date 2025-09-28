@@ -5,6 +5,7 @@ from sys import exit
 from .constants import (
     COMMANDS,
     CURRENT_ROOM,
+    DIRECTIONS,
     ENTRANCE,
     GAME_OVER,
     PLAYER_INVENTORY,
@@ -50,8 +51,9 @@ def process_command(game_state: dict, command: str):
                 attempt_open_treasure(game_state)
             else:
                 use_item(game_state, arg)
-        case "go" | "north" | "south" | "west" | "east":
-            direction = arg if cmd == "go" else cmd
+        case "go":
+            move_player(game_state, arg)
+        case direction if direction in DIRECTIONS:
             move_player(game_state, direction)
         case "take":
             if in_treasure_room and arg_is_treasure:
