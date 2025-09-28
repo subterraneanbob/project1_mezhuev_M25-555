@@ -2,6 +2,7 @@
 
 from sys import exit
 
+from .constants import COMMANDS
 from .player_actions import get_input, move_player, show_inventory, take_item, use_item
 from .utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
 
@@ -59,7 +60,7 @@ def process_command(game_state: dict, command: str):
             print("\nВыход из игры.")
             exit(0)
         case "help":
-            show_help()
+            show_help(COMMANDS)
 
     if game_state["game_over"]:
         print("Поздравляем!")
