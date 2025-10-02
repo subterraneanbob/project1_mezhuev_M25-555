@@ -7,11 +7,20 @@ from .constants import (
     CURRENT_ROOM,
     DIRECTIONS,
     ENTRANCE,
+    EXIT,
     GAME_OVER,
+    GO,
+    HELP,
+    INVENTORY,
+    LOOK,
     PLAYER_INVENTORY,
+    QUIT,
+    SOLVE,
     STEPS_TAKEN,
+    TAKE,
     TREASURE_CHEST,
     TREASURE_ROOM,
+    USE,
 )
 from .player_actions import get_input, move_player, show_inventory, take_item, use_item
 from .utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
@@ -44,35 +53,34 @@ def process_command(game_state: dict, command: str):
     in_treasure_room = game_state[CURRENT_ROOM] == TREASURE_ROOM
     arg_is_treasure = arg == TREASURE_CHEST
 
-    match cmd:
-        case "look":
-            describe_current_room(game_state)
-        case "use":
-            if in_treasure_room and arg_is_treasure:
-                attempt_open_treasure(game_state)
-            else:
-                use_item(game_state, arg)
-        case "go":
-            move_player(game_state, arg)
-        case direction if direction in DIRECTIONS:
-            move_player(game_state, direction)
-        case "take":
-            if in_treasure_room and arg_is_treasure:
-                print("Сундук с сокровищами слишком большой, чтобы его поднять.")
-            else:
-                take_item(game_state, arg)
-        case "inventory":
-            show_inventory(game_state)
-        case "solve":
-            if in_treasure_room:
-                attempt_open_treasure(game_state)
-            else:
-                solve_puzzle(game_state)
-        case "quit" | "exit":
-            print("\nВыход из игры.")
-            exit(0)
-        case "help":
-            show_help(COMMANDS)
+    if cmd == LOOK:
+        describe_current_room(game_state)
+    elif cmd == USE:
+        if in_treasure_room and arg_is_treasure:
+            attempt_open_treasure(game_state)
+        else:
+            use_item(game_state, arg)
+    elif cmd == GO:
+        move_player(game_state, arg)
+    elif cmd in DIRECTIONS:
+        move_player(game_state, cmd)
+    elif cmd == TAKE:
+        if in_treasure_room and arg_is_treasure:
+            print("Сундук с сокровищами слишком большой, чтобы его поднять.")
+        else:
+            take_item(game_state, arg)
+    elif cmd == INVENTORY:
+        show_inventory(game_state)
+    elif cmd == SOLVE:
+        if in_treasure_room:
+            attempt_open_treasure(game_state)
+        else:
+            solve_puzzle(game_state)
+    elif cmd == QUIT or cmd == EXIT:
+        print("\nВыход из игры.")
+        exit(0)
+    elif cmd == HELP:
+        show_help(COMMANDS)
 
 
 def main():

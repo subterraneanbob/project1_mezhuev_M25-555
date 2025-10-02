@@ -114,13 +114,24 @@ ROOMS = {
 DEATH_TRAP_PROBABILITY = 30  # Вероятность смерти при попадании в ловушку, %
 RANDOM_EVENT_PROBABILITY = 10  # Вероятность возникновения случайного события, %
 
+# Команды
+GO = "go"
+LOOK = "look"
+TAKE = "take"
+USE = "use"
+INVENTORY = "inventory"
+SOLVE = "solve"
+QUIT = "quit"
+EXIT = "exit"
+HELP = "help"
+
 COMMANDS = {
-    "go <direction>": "перейти в направлении (north/south/east/west)",
-    "look": "осмотреть текущую комнату",
-    "take <item>": "поднять предмет",
-    "use <item>": "использовать предмет из инвентаря",
-    "inventory": "показать инвентарь",
-    "solve": "попытаться решить загадку в комнате",
-    "quit": "выйти из игры",
-    "help": "показать это сообщение",
+    f"{GO} <direction>": "перейти в направлении (north/south/east/west)",
+    LOOK: "осмотреть текущую комнату",
+    f"{TAKE} <item>": "поднять предмет",
+    f"{USE} <item>": "использовать предмет из инвентаря",
+    INVENTORY: "показать инвентарь",
+    SOLVE: "попытаться решить загадку в комнате",
+    QUIT: "выйти из игры",
+    HELP: "показать это сообщение",
 }
